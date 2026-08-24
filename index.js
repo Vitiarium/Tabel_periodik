@@ -2,13 +2,7 @@ var Godot=(()=>{var _scriptName=globalThis.document?.currentScript?.src;return a
 ;return moduleRtn}})();if(typeof exports==="object"&&typeof module==="object"){module.exports=Godot;module.exports.default=Godot}else if(typeof define==="function"&&define["amd"])define([],()=>Godot);
 
 const Features = {
-	/**
-	 * Check whether WebGL is available. Optionally, specify a particular version of WebGL to check for.
-	 *
-	 * @param {number=} [majorVersion=1] The major WebGL version to check for.
-	 * @returns {boolean} If the given major version of WebGL is available.
-	 * @function Engine.isWebGLAvailable
-	 */
+
 	isWebGLAvailable: function (majorVersion = 1) {
 		try {
 			return !!document.createElement('canvas').getContext(['webgl', 'webgl2'][majorVersion - 1]);
@@ -16,67 +10,31 @@ const Features = {
 		return false;
 	},
 
-	/**
-	 * Check whether the Fetch API available and supports streaming responses.
-	 *
-	 * @returns {boolean} If the Fetch API is available and supports streaming responses.
-	 * @function Engine.isFetchAvailable
-	 */
+
 	isFetchAvailable: function () {
 		return 'fetch' in window && 'Response' in window && 'body' in window.Response.prototype;
 	},
 
-	/**
-	 * Check whether the engine is running in a Secure Context.
-	 *
-	 * @returns {boolean} If the engine is running in a Secure Context.
-	 * @function Engine.isSecureContext
-	 */
+
 	isSecureContext: function () {
 		return window['isSecureContext'] === true;
 	},
 
-	/**
-	 * Check whether the engine is cross origin isolated.
-	 * This value is dependent on Cross-Origin-Opener-Policy and Cross-Origin-Embedder-Policy headers sent by the server.
-	 *
-	 * @returns {boolean} If the engine is running in a Secure Context.
-	 * @function Engine.isSecureContext
-	 */
+
 	isCrossOriginIsolated: function () {
 		return window['crossOriginIsolated'] === true;
 	},
 
-	/**
-	 * Check whether SharedBufferArray is available.
-	 *
-	 * Most browsers require the page to be running in a secure context, and the
-	 * the server to provide specific CORS headers for SharedArrayBuffer to be available.
-	 *
-	 * @returns {boolean} If SharedArrayBuffer is available.
-	 * @function Engine.isSharedArrayBufferAvailable
-	 */
+
 	isSharedArrayBufferAvailable: function () {
 		return 'SharedArrayBuffer' in window;
 	},
 
-	/**
-	 * Check whether the AudioContext supports AudioWorkletNodes.
-	 *
-	 * @returns {boolean} If AudioWorkletNode is available.
-	 * @function Engine.isAudioWorkletAvailable
-	 */
+
 	isAudioWorkletAvailable: function () {
 		return 'AudioContext' in window && 'audioWorklet' in AudioContext.prototype;
 	},
 
-	/**
-	 * Return an array of missing required features (as string).
-	 *
-	 * @returns {Array<string>} A list of human-readable missing features.
-	 * @function Engine.getMissingFeatures
-	 * @param {{threads: (boolean|undefined)}} supportedFeatures
-	 */
 	getMissingFeatures: function (supportedFeatures = {}) {
 		const {
 			// Quotes are needed for the Closure compiler.
@@ -242,199 +200,44 @@ const Preloader = /** @constructor */ function () { // eslint-disable-line no-un
 	};
 };
 
-/**
- * An object used to configure the Engine instance based on godot export options, and to override those in custom HTML
- * templates if needed.
- *
- * @header Engine configuration
- * @summary The Engine configuration object. This is just a typedef, create it like a regular object, e.g.:
- *
- * ``const MyConfig = { executable: 'godot', unloadAfterInit: false }``
- *
- * @typedef {Object} EngineConfig
- */
+
 const EngineConfig = {}; // eslint-disable-line no-unused-vars
 
-/**
- * @struct
- * @constructor
- * @ignore
- */
 const InternalConfig = function (initConfig) { // eslint-disable-line no-unused-vars
 	const cfg = /** @lends {InternalConfig.prototype} */ {
-		/**
-		 * Whether to unload the engine automatically after the instance is initialized.
-		 *
-		 * @memberof EngineConfig
-		 * @default
-		 * @type {boolean}
-		 */
+
 		unloadAfterInit: true,
-		/**
-		 * The HTML DOM Canvas object to use.
-		 *
-		 * By default, the first canvas element in the document will be used is none is specified.
-		 *
-		 * @memberof EngineConfig
-		 * @default
-		 * @type {?HTMLCanvasElement}
-		 */
+
 		canvas: null,
-		/**
-		 * The name of the WASM file without the extension. (Set by Godot Editor export process).
-		 *
-		 * @memberof EngineConfig
-		 * @default
-		 * @type {string}
-		 */
 		executable: '',
-		/**
-		 * An alternative name for the game pck to load. The executable name is used otherwise.
-		 *
-		 * @memberof EngineConfig
-		 * @default
-		 * @type {?string}
-		 */
 		mainPack: null,
-		/**
-		 * Specify a language code to select the proper localization for the game.
-		 *
-		 * The browser locale will be used if none is specified. See complete list of
-		 * :ref:`supported locales <doc_locales>`.
-		 *
-		 * @memberof EngineConfig
-		 * @type {?string}
-		 * @default
-		 */
 		locale: null,
-		/**
-		 * The canvas resize policy determines how the canvas should be resized by Godot.
-		 *
-		 * ``0`` means Godot won't do any resizing. This is useful if you want to control the canvas size from
-		 * javascript code in your template.
-		 *
-		 * ``1`` means Godot will resize the canvas on start, and when changing window size via engine functions.
-		 *
-		 * ``2`` means Godot will adapt the canvas size to match the whole browser window.
-		 *
-		 * @memberof EngineConfig
-		 * @type {number}
-		 * @default
-		 */
+
 		canvasResizePolicy: 2,
-		/**
-		 * The arguments to be passed as command line arguments on startup.
-		 *
-		 * See :ref:`command line tutorial <doc_command_line_tutorial>`.
-		 *
-		 * **Note**: :js:meth:`startGame <Engine.prototype.startGame>` will always add the ``--main-pack`` argument.
-		 *
-		 * @memberof EngineConfig
-		 * @type {Array<string>}
-		 * @default
-		 */
+		
 		args: [],
-		/**
-		 * When enabled, the game canvas will automatically grab the focus when the engine starts.
-		 *
-		 * @memberof EngineConfig
-		 * @type {boolean}
-		 * @default
-		 */
+
 		focusCanvas: true,
-		/**
-		 * When enabled, this will turn on experimental virtual keyboard support on mobile.
-		 *
-		 * @memberof EngineConfig
-		 * @type {boolean}
-		 * @default
-		 */
+
 		experimentalVK: false,
-		/**
-		 * The progressive web app service worker to install.
-		 * @memberof EngineConfig
-		 * @default
-		 * @type {string}
-		 */
+
 		serviceWorker: '',
-		/**
-		 * @ignore
-		 * @type {Array.<string>}
-		 */
+
 		persistentPaths: ['/userfs'],
-		/**
-		 * @ignore
-		 * @type {boolean}
-		 */
+
 		persistentDrops: false,
-		/**
-		 * @ignore
-		 * @type {Array.<string>}
-		 */
+
 		gdextensionLibs: [],
-		/**
-		 * @ignore
-		 * @type {Array.<string>}
-		 */
+
 		fileSizes: [],
-		/**
-		 * @ignore
-		 * @type {number}
-		 */
+
 		emscriptenPoolSize: 8,
-		/**
-		 * @ignore
-		 * @type {number}
-		 */
+
 		godotPoolSize: 4,
-		/**
-		 * A callback function for handling Godot's ``OS.execute`` calls.
-		 *
-		 * This is for example used in the Web Editor template to switch between project manager and editor, and for running the game.
-		 *
-		 * @callback EngineConfig.onExecute
-		 * @param {string} path The path that Godot's wants executed.
-		 * @param {Array.<string>} args The arguments of the "command" to execute.
-		 */
-		/**
-		 * @ignore
-		 * @type {?function(string, Array.<string>)}
-		 */
+
 		onExecute: null,
-		/**
-		 * A callback function for being notified when the Godot instance quits.
-		 *
-		 * **Note**: This function will not be called if the engine crashes or become unresponsive.
-		 *
-		 * @callback EngineConfig.onExit
-		 * @param {number} status_code The status code returned by Godot on exit.
-		 */
-		/**
-		 * @ignore
-		 * @type {?function(number)}
-		 */
+
 		onExit: null,
-		/**
-		 * A callback function for displaying download progress.
-		 *
-		 * The function is called once per frame while downloading files, so the usage of ``requestAnimationFrame()``
-		 * is not necessary.
-		 *
-		 * If the callback function receives a total amount of bytes as 0, this means that it is impossible to calculate.
-		 * Possible reasons include:
-		 *
-		 * -  Files are delivered with server-side chunked compression
-		 * -  Files are delivered with server-side compression on Chromium
-		 * -  Not all file downloads have started yet (usually on servers without multi-threading)
-		 *
-		 * @callback EngineConfig.onProgress
-		 * @param {number} current The current amount of downloaded bytes so far.
-		 * @param {number} total The total amount of bytes to be downloaded.
-		 */
-		/**
-		 * @ignore
-		 * @type {?function(number, number)}
-		 */
 		onProgress: null,
 		/**
 		 * A callback function for handling the standard output stream. This method should usually only be used in debug pages.
